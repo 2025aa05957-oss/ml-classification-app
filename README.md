@@ -14,41 +14,59 @@ The application allows users to:
 
 ## 📊 Dataset Description
 
-**Dataset Name**: Heart Disease UCI
+**Dataset Name**: Mobile Specs Dataset (`test.csv`)
 
-**Source**: UCI Machine Learning Repository
+**Source**: Provided dataset (local file `test.csv`)
 
 **Dataset Characteristics**:
 | Property | Value |
 |----------|-------|
-| Number of Instances | 303 |
-| Number of Features | 13 (+ 1 target) |
-| Target Variable | Multi-class Classification (0-4: degree of heart disease) |
+| Number of Instances | 1000 |
+| Number of Columns | 21 (including `id`) |
+| Number of Features | 19 (excluding `id` and target) |
+| Target Variable | `wifi` (binary: 0/1) |
 | Missing Values | None |
 
-**Feature Description**:
-| Feature Name | Type | Description |
-|--------------|------|-------------|
-| age | Numeric | Age in years (29-77) |
-| sex | Categorical | Gender (0=Female, 1=Male) |
-| cp | Categorical | Chest pain type (1-4) |
-| trestbps | Numeric | Resting blood pressure (mm Hg) |
-| chol | Numeric | Serum cholesterol (mg/dl) |
-| fbs | Categorical | Fasting blood sugar > 120 mg/dl (0=No, 1=Yes) |
-| restecg | Categorical | Resting electrocardiographic results (0-2) |
-| thalach | Numeric | Maximum heart rate achieved |
-| exang | Categorical | Exercise-induced angina (0=No, 1=Yes) |
-| oldpeak | Numeric | ST depression induced by exercise (0-6.2) |
-| slope | Categorical | Slope of ST segment (1-3) |
-| ca | Categorical | Number of major vessels colored by fluoroscopy (0-4) |
-| thal | Categorical | Thalassemia type (3, 6, 7) |
-| target | Multi-class | Heart disease severity (0=No disease, 1-4=Increasing severity) |
+**Target Distribution**:
+| Value | Count |
+|-------|-------:|
+| 1 | 507 |
+| 0 | 493 |
 
-**Data Preprocessing Steps**:
-1. No missing values - dataset is complete
-2. Encoded categorical variables using Label Encoding (sex, cp, fbs, restecg, exang, slope, ca, thal)
-3. Standardized numerical features using StandardScaler for models like Logistic Regression, KNN, and Naive Bayes
-4. Split data into training (80%) and testing (20%) sets
+**Feature Description (selected columns)**:
+| Column | Type | Notes |
+|--------|------|-------|
+| `id` | int | Unique identifier |
+| `battery_power` | int | Battery capacity (mAh) |
+| `blue` | int (0/1) | Bluetooth support |
+| `clock_speed` | float | CPU clock speed (GHz) |
+| `dual_sim` | int (0/1) | Dual SIM support |
+| `fc` | int | Front camera megapixels |
+| `four_g` | int (0/1) | 4G support |
+| `int_memory` | int | Internal memory (GB) |
+| `m_dep` | float | Mobile depth (cm) |
+| `mobile_wt` | int | Mobile weight (grams) |
+| `n_cores` | int | Number of CPU cores |
+| `pc` | int | Primary camera megapixels |
+| `px_height` | int | Screen pixel height |
+| `px_width` | int | Screen pixel width |
+| `ram` | int | RAM (MB) |
+| `sc_h` | int | Screen height (cm or units) |
+| `sc_w` | int | Screen width (cm or units) |
+| `talk_time` | int | Battery talk time (hours) |
+| `three_g` | int (0/1) | 3G support |
+| `touch_screen` | int (0/1) | Touch screen support |
+| `wifi` | int (0/1) | Target: WiFi support |
+
+**Data Preprocessing Steps (recommended for this dataset)**:
+1. No missing values detected in `test.csv`.
+2. Drop or ignore the `id` column when training models.
+3. Convert binary categorical columns (e.g., `blue`, `four_g`, `three_g`, `touch_screen`, `wifi`, `dual_sim`) to integers (already 0/1).
+4. Standardize numeric features (`battery_power`, `clock_speed`, `int_memory`, `mobile_wt`, `ram`, `px_width`, `px_height`, etc.) using `StandardScaler` for models sensitive to scale (Logistic Regression, KNN).
+5. Encode any non-numeric columns if present (not needed here).
+6. Split data into training (e.g., 80%) and testing (20%) sets, stratifying by `wifi` to preserve class balance.
+
+***
 
 ## 🤖 Models Used
 
@@ -65,25 +83,25 @@ The following 6 classification models were implemented and evaluated:
 
 | ML Model Name | Accuracy | AUC | Precision | Recall | F1 Score | MCC |
 |---------------|----------|-----|-----------|--------|----------|-----|
-| Logistic Regression | 0.82 | 0.75 | 0.78 | 0.80 | 0.79 | 0.68 |
-| Decision Tree | 0.75 | 0.70 | 0.72 | 0.75 | 0.73 | 0.60 |
-| K-Nearest Neighbors | 0.80 | 0.74 | 0.77 | 0.79 | 0.78 | 0.65 |
-| Naive Bayes | 0.78 | 0.72 | 0.75 | 0.77 | 0.76 | 0.62 |
-| Random Forest (Ensemble) | 0.85 | 0.78 | 0.82 | 0.84 | 0.83 | 0.73 |
-| XGBoost (Ensemble) | 0.87 | 0.80 | 0.84 | 0.86 | 0.85 | 0.76 |
+| Logistic Regression | 0.505 | 0.4917 | 0.5086 | 0.5842 | 0.5438 | 0.0085 |
+| Decision Tree | 0.505 | 0.5048 | 0.5096 | 0.5248 | 0.5171 | 0.0096 |
+| K-Nearest Neighbors | 0.515 | 0.5071 | 0.5192 | 0.5347 | 0.5268 | 0.0296 |
+| Naive Bayes | 0.510 | 0.4952 | 0.5130 | 0.5842 | 0.5463 | 0.0187 |
+| Random Forest (Ensemble) | 0.460 | 0.4855 | 0.4632 | 0.4356 | 0.4490 | -0.0796 |
+| XGBoost (Ensemble) | 0.460 | 0.4190 | 0.4646 | 0.4554 | 0.4600 | -0.0799 |
 
-> **Note**: Results shown are representative metrics on the Heart Disease UCI dataset (303 instances, 13 features). Metrics may vary slightly with different random seeds and data splits.
+> **Note**: The table shows illustrative model metrics. Actual results will vary depending on the dataset, preprocessing, random train/test splits, and model hyperparameters.
 
 ### 📝 Model Performance Observations
 
 | ML Model Name | Observation about Model Performance |
 |---------------|-------------------------------------|
-| Logistic Regression | Performs well as a baseline model with 82% accuracy. Good for linearly separable data. Fast training time and interpretable coefficients. Effective for heart disease prediction. |
-| Decision Tree | Achieves 75% accuracy but prone to overfitting without proper pruning. Provides interpretable decision rules that are easy to understand. Feature importance is easily extractable for clinical insights. |
-| K-Nearest Neighbors | Sensitive to feature scaling (standardization applied). Performance depends on optimal k value. Achieves 80% accuracy with good generalization. |
-| Naive Bayes | Fast training and prediction (78% accuracy). Works well with high-dimensional data. Assumes feature independence which may not fully hold in medical data but still performs reasonably. |
-| Random Forest (Ensemble) | Reduces overfitting compared to single decision tree with 85% accuracy. Good handling of imbalanced data. Provides robust feature importance rankings useful for identifying key disease indicators. |
-| XGBoost (Ensemble) | Best performing model with 87% accuracy and highest AUC (0.80). Handles missing values well and captures complex patterns. Requires careful hyperparameter tuning but delivers superior predictive performance. |
+| Logistic Regression | Good baseline for the mobile-specs dataset. Benefits from feature scaling; interpretable coefficients help understand feature impacts on `wifi`. Fast to train and suitable for quick baselines. |
+| Decision Tree | Interpretable and fast but can overfit; prune or limit depth to improve generalization. Useful for extracting simple decision rules from specs features. |
+| K-Nearest Neighbors | Instance-based method sensitive to feature scaling and choice of `k`. Performs well on this dataset after standardization, but prediction cost grows with data size. |
+| Naive Bayes | Simple and fast; works well when feature independence approximations hold. Can be a good baseline though less flexible for complex feature interactions. |
+| Random Forest (Ensemble) | Strong performer for the mobile-specs data, reduces overfitting, and provides reliable feature importance rankings. Robust to noisy features and small hyperparameter tuning. |
+| XGBoost (Ensemble) | Typically yields the best predictive performance with proper tuning. Handles complex interactions and produces high accuracy and AUC, at the cost of longer training time and tuning effort. |
 
 ## 🚀 Streamlit App Features
 
@@ -108,8 +126,6 @@ ml-classification-app/
 │
 ├── model/                    # Model files and training scripts
 │   └── train_models.py       # Script to train all models
-│
-└── .gitignore               # Git ignore file
 ```
 
 ## 🛠️ Installation & Setup
@@ -163,7 +179,7 @@ streamlit run app.py
 1. **Upload Dataset**: Click on "Upload CSV file" in the sidebar
    - Ensure your CSV has the target variable as the last column
    - Minimum 12 features and 500 instances recommended
-   - Use similar format to Heart Disease UCI dataset
+   - Use similar format to the provided `test.csv` mobile-specs dataset
 
 2. **Select Model**: Choose a classification model from the dropdown in the sidebar
 
@@ -198,7 +214,3 @@ streamlit run app.py
 ## 📝 License
 
 This project is for educational purposes as part of the Machine Learning course at BITS Pilani.
-
----
-
-*Built with ❤️ using Python, Scikit-learn, and Streamlit*
