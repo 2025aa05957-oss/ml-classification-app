@@ -14,9 +14,9 @@ The application allows users to:
 
 ## 📊 Dataset Description
 
-**Dataset Name**: Mobile Specs Dataset (`test.csv`)
+**Dataset Name**: Mobile Specs Dataset
 
-**Source**: Provided dataset (local file `test.csv`)
+**Source**: Kaggle
 
 **Dataset Characteristics**:
 | Property | Value |
