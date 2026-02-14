@@ -12,6 +12,7 @@ import pandas as pd
 import numpy as np
 import pickle
 import os
+import requests
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler, LabelEncoder
 from sklearn.linear_model import LogisticRegression
@@ -395,6 +396,32 @@ else:
     # No file uploaded - show instructions
     st.header("🚀 Getting Started")
     
+    # Define the RAW github URL
+    github_raw_url = "https://raw.githubusercontent.com/2025aa05957-oss/ml-classification-app/main/test.csv"
+    
+    st.markdown("### 📥 Need a Sample Dataset?")
+    st.write("Click the button below to download the test dataset directly to your computer.")
+
+    try:
+        # Fetch the file content from GitHub
+        response = requests.get(github_raw_url)
+        if response.status_code == 200:
+            # Use Streamlit's native download button
+            st.download_button(
+                label="📥 Download Test Data",
+                data=response.text,
+                file_name="test_data.csv",
+                mime="text/csv",
+                help="Click to save the CSV file to your local machine"
+            )
+        else:
+            st.error("Failed to fetch the file from GitHub. Please check the URL.")
+    except Exception as e:
+        st.error(f"An error occurred: {e}")
+
+    st.divider()
+    # -------------------------------------
+
     st.markdown("""
     ### Welcome to the ML Classification Models Dashboard!
     
